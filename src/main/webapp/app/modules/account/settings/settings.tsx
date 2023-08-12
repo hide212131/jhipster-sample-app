@@ -1,17 +1,34 @@
 import React, { useEffect } from 'react';
-import { Button, Col, Row } from 'reactstrap';
-import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
+import { Button, Col, Row, Form, Input } from 'reactstrap';
+import { Translate, translate, ValidatedTextInput, isEmail } from 'react-jhipster';
 import { toast } from 'react-toastify';
 
 import { locales, languages } from 'app/config/translation';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
+import { DefaultValues, FieldValues, useForm } from 'react-hook-form';
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
   const account = useAppSelector(state => state.authentication.account);
   const successMessage = useAppSelector(state => state.settings.successMessage);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, touchedFields },
+    reset: resetAsyncForm,
+  } = useForm({ mode: 'onTouched' });
+
+  useEffect(() => {
+    resetAsyncForm({
+      firstName: account?.firstName,
+      lastName: account?.lastName,
+      email: account?.email,
+      langKey: account?.langKey,
+    } as FieldValues);
+  }, [account]);
 
   useEffect(() => {
     dispatch(getSession());
@@ -44,55 +61,64 @@ export const SettingsPage = () => {
               User settings for {account.login}
             </Translate>
           </h2>
-          <ValidatedForm id="settings-form" onSubmit={handleValidSubmit} defaultValues={account}>
-            <ValidatedField
-              name="firstName"
-              label={translate('settings.form.firstname')}
-              id="firstName"
-              placeholder={translate('settings.form.firstname.placeholder')}
+          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <Form id="settings-form" onSubmit={handleSubmit(handleValidSubmit)}>
+            <ValidatedTextInput
+              register={register}
+              touchedFields={touchedFields}
+              errors={errors}
+              setValue={setValue}
+              nameIdCy="firstName"
               validate={{
-                required: { value: true, message: translate('settings.messages.validate.firstname.required') },
+                required: translate('settings.messages.validate.firstname.required'),
                 minLength: { value: 1, message: translate('settings.messages.validate.firstname.minlength') },
                 maxLength: { value: 50, message: translate('settings.messages.validate.firstname.maxlength') },
               }}
-              data-cy="firstname"
+              labelPlaceholderKey="settings.form.firstname"
+              inputPlaceholderKey="settings.form.firstname.placeholder"
             />
-            <ValidatedField
-              name="lastName"
-              label={translate('settings.form.lastname')}
-              id="lastName"
-              placeholder={translate('settings.form.lastname.placeholder')}
+            <ValidatedTextInput
+              register={register}
+              touchedFields={touchedFields}
+              errors={errors}
+              setValue={setValue}
+              nameIdCy="lastName"
               validate={{
-                required: { value: true, message: translate('settings.messages.validate.lastname.required') },
+                required: translate('settings.messages.validate.lastname.required'),
                 minLength: { value: 1, message: translate('settings.messages.validate.lastname.minlength') },
                 maxLength: { value: 50, message: translate('settings.messages.validate.lastname.maxlength') },
               }}
-              data-cy="lastname"
+              labelPlaceholderKey="settings.form.lastname"
+              inputPlaceholderKey="settings.form.lastname.placeholder"
             />
-            <ValidatedField
-              name="email"
-              label={translate('global.form.email.label')}
-              placeholder={translate('global.form.email.placeholder')}
+            <ValidatedTextInput
+              register={register}
+              touchedFields={touchedFields}
+              errors={errors}
+              setValue={setValue}
+              nameIdCy="email"
               type="email"
               validate={{
-                required: { value: true, message: translate('global.messages.validate.email.required') },
+                required: translate('global.messages.validate.email.required'),
                 minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
                 maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
                 validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
-              data-cy="email"
+              labelPlaceholderKey="global.form.email.label"
+              inputPlaceholderKey="global.form.email.placeholder"
             />
-            <ValidatedField type="select" id="langKey" name="langKey" label={translate('settings.form.language')} data-cy="langKey">
+
+            <Input type="select" id="langKey" name="langKey" label={translate('settings.form.language')} data-cy="langKey">
               {locales.map(locale => (
                 <option value={locale} key={locale}>
                   {languages[locale].name}
                 </option>
               ))}
-            </ValidatedField>
+            </Input>
             <Button color="primary" type="submit" data-cy="submit">
               <Translate contentKey="settings.form.button">Save</Translate>
             </Button>
-          </ValidatedForm>
+          </Form>
         </Col>
       </Row>
     </div>

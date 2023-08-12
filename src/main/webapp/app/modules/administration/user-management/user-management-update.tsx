@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
-import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
+import { Button, Row, Col, Form, Input } from 'reactstrap';
+import { Translate, translate, ValidatedTextInput, isEmail, registerReactstrap } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FieldValues, useForm } from 'react-hook-form';
 
 import { locales, languages } from 'app/config/translation';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
@@ -46,6 +47,26 @@ export const UserManagementUpdate = () => {
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
   const authorities = useAppSelector(state => state.userManagement.authorities);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, touchedFields },
+    reset: resetAsyncForm,
+  } = useForm({ mode: 'onTouched' });
+
+  useEffect(() => {
+    resetAsyncForm({
+      id: user?.id,
+      login: user?.login,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      activated: user?.activated,
+      langKey: user?.langKey,
+      authorities: user?.authorities,
+    } as FieldValues);
+  }, [user]);
 
   return (
     <div>
@@ -61,26 +82,30 @@ export const UserManagementUpdate = () => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <ValidatedForm onSubmit={saveUser} defaultValues={user}>
+            /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
+            <Form onSubmit={handleSubmit(saveUser)}>
               {user.id ? (
-                <ValidatedField
-                  type="text"
-                  name="id"
-                  required
+                <ValidatedTextInput
+                  register={register}
+                  touchedFields={touchedFields}
+                  errors={errors}
+                  setValue={setValue}
+                  nameIdCy="id"
+                  validate={{
+                    required: true,
+                  }}
                   readOnly
-                  label={translate('global.field.id')}
-                  validate={{ required: true }}
+                  labelPlaceholderKey="global.field.id"
                 />
               ) : null}
-              <ValidatedField
-                type="text"
-                name="login"
-                label={translate('userManagement.login')}
+              <ValidatedTextInput
+                register={register}
+                touchedFields={touchedFields}
+                errors={errors}
+                setValue={setValue}
+                nameIdCy="login"
                 validate={{
-                  required: {
-                    value: true,
-                    message: translate('register.messages.validate.login.required'),
-                  },
+                  required: translate('register.messages.validate.login.required'),
                   pattern: {
                     value: /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/,
                     message: translate('register.messages.validate.login.pattern'),
@@ -94,40 +119,45 @@ export const UserManagementUpdate = () => {
                     message: translate('register.messages.validate.login.maxlength'),
                   },
                 }}
+                labelPlaceholderKey="userManagement.login"
               />
-              <ValidatedField
-                type="text"
-                name="firstName"
-                label={translate('userManagement.firstName')}
+              <ValidatedTextInput
+                register={register}
+                touchedFields={touchedFields}
+                errors={errors}
+                setValue={setValue}
+                nameIdCy="firstName"
                 validate={{
                   maxLength: {
                     value: 50,
                     message: translate('entity.validation.maxlength', { max: 50 }),
                   },
                 }}
+                labelPlaceholderKey="userManagement.firstName"
               />
-              <ValidatedField
-                type="text"
-                name="lastName"
-                label={translate('userManagement.lastName')}
+              <ValidatedTextInput
+                register={register}
+                touchedFields={touchedFields}
+                errors={errors}
+                setValue={setValue}
+                nameIdCy="lastName"
                 validate={{
                   maxLength: {
                     value: 50,
                     message: translate('entity.validation.maxlength', { max: 50 }),
                   },
                 }}
+                labelPlaceholderKey="userManagement.lastName"
               />
-              <FormText>This field cannot be longer than 50 characters.</FormText>
-              <ValidatedField
-                name="email"
-                label={translate('global.form.email.label')}
-                placeholder={translate('global.form.email.placeholder')}
+              <ValidatedTextInput
+                register={register}
+                touchedFields={touchedFields}
+                errors={errors}
+                setValue={setValue}
+                nameIdCy="email"
                 type="email"
                 validate={{
-                  required: {
-                    value: true,
-                    message: translate('global.messages.validate.email.required'),
-                  },
+                  required: translate('global.messages.validate.email.required'),
                   minLength: {
                     value: 5,
                     message: translate('global.messages.validate.email.minlength'),
@@ -138,29 +168,31 @@ export const UserManagementUpdate = () => {
                   },
                   validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
                 }}
+                labelPlaceholderKey="global.form.email.label"
+                inputPlaceholderKey="global.form.email.placeholder"
               />
-              <ValidatedField
-                type="checkbox"
-                name="activated"
-                check
-                value={true}
-                disabled={!user.id}
-                label={translate('userManagement.activated')}
-              />
-              <ValidatedField type="select" name="langKey" label={translate('userManagement.langKey')}>
+              <Input type="checkbox" name="activated" check {...registerReactstrap(register, 'activated')} disabled={!user.id} />
+              {translate('userManagement.activated')}
+              <Input type="select" name="langKey" label={translate('userManagement.langKey')} {...registerReactstrap(register, 'langKey')}>
                 {locales.map(locale => (
                   <option value={locale} key={locale}>
                     {languages[locale].name}
                   </option>
                 ))}
-              </ValidatedField>
-              <ValidatedField type="select" name="authorities" multiple label={translate('userManagement.profiles')}>
+              </Input>
+              <Input
+                type="select"
+                name="authorities"
+                multiple
+                label={translate('userManagement.profiles')}
+                {...registerReactstrap(register, 'authorities')}
+              >
                 {authorities.map(role => (
                   <option value={role} key={role}>
                     {role}
                   </option>
                 ))}
-              </ValidatedField>
+              </Input>
               <Button tag={Link} to="/admin/user-management" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -174,7 +206,7 @@ export const UserManagementUpdate = () => {
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
-            </ValidatedForm>
+            </Form>
           )}
         </Col>
       </Row>
