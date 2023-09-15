@@ -1,0 +1,27 @@
+{
+  "applications": ["jhipster"],
+  "changelogDate": "20230915163116",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "country",
+  "fields": [
+    {
+      "fieldName": "countryName",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Country",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "regionName",
+      "otherEntityName": "region",
+      "relationshipName": "region",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}
