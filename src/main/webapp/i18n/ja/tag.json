@@ -1,0 +1,25 @@
+{
+  "myReactApp": {
+    "tag": {
+      "home": {
+        "title": "Tags",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Tag の作成",
+        "createOrEditLabel": "Tagの作成または編集",
+        "notFound": "Tags が見つかりません。"
+      },
+      "created": "新しい Tag がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Tag が更新されました。",
+      "deleted": "ID {{ param }} の Tag が削除されました。",
+      "delete": {
+        "question": "Tag {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Tag"
+      },
+      "id": "ID",
+      "name": "Name",
+      "entry": "Entry"
+    }
+  }
+}

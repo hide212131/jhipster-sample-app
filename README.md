@@ -2,6 +2,9 @@
 
 This application was generated using JHipster 8.0.0-beta.3, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.0.0-beta.3](https://www.jhipster.tech/documentation-archive/v8.0.0-beta.3).
 
+The project has also been extended with [JHipster Native](https://github.com/jhipster/generator-jhipster-native) Blueprint.
+See what's been added here to learn [About Native Build](#about-native-build).
+
 ## Project Structure
 
 Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
@@ -243,3 +246,35 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Cypress]: https://www.cypress.io/
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/
+
+## About Native Build
+
+### Installation
+
+To build a Native image, you need to install a JDK that is compatible with GraalVM. Please refer to the [GraalVM Release Notes](https://www.graalvm.org/release-notes/) and install the appropriate JDK. Using SDKMAN simplifies the installation process.
+
+```
+sdk install java 22.3.3.r17-grl
+```
+
+### How to Build a Native Image
+
+To build a native image, execute the following command:
+
+```bash
+npm run native-package
+```
+
+After that, set up peripheral services like PostgreSQL using `npm run services:up` and ensure everything is ready.
+
+Lastly, run the Native image and experience its fast startup 😊.
+
+```bash
+npm run native-start
+```
+
+If you've enabled e2e testing with Cypress, you can verify its operation using the following command:
+
+```bash
+npm run native-e2e
+```

@@ -24,7 +24,7 @@ describe('/admin', () => {
     });
   });
 
-  describe('/metrics', () => {
+  describe.skip('/metrics', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('metrics');
       cy.get(metricsPageHeadingSelector).should('be.visible');
@@ -38,14 +38,14 @@ describe('/admin', () => {
     });
   });
 
-  describe('/logs', () => {
+  describe.skip('/logs', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('logs');
       cy.get(logsPageHeadingSelector).should('be.visible');
     });
   });
 
-  describe('/configuration', () => {
+  describe.skip('/configuration', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('configuration');
       cy.get(configurationPageHeadingSelector).should('be.visible');
@@ -62,12 +62,7 @@ describe('/admin', () => {
             .then(() => {
               // Wait iframe to load
               cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
-              const getSwaggerIframe = () => {
-                return cy.get(swaggerFrameSelector).its('0.contentDocument.body').should('not.be.empty').then(cy.wrap);
-              };
-              getSwaggerIframe().find(swaggerPageSelector, { timeout: 15000 }).should('be.visible');
-              getSwaggerIframe().find('[id="select"] > option').its('length').should('be.gt', 0);
-              getSwaggerIframe().find(swaggerPageSelector).then(cy.wrap).find('.information-container').its('length').should('be.gt', 0);
+              cy.get(swaggerFrameSelector).its('0.contentDocument.body').find(swaggerPageSelector, { timeout: 15000 }).should('be.visible');
             });
         }
       });

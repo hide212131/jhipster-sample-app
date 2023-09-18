@@ -1,7 +1,9 @@
 package com.mycompany.myapp.web.rest.errors;
 
 import java.io.Serializable;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 
+@RegisterReflectionForBinding({ FieldErrorVM.class })
 public class FieldErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;

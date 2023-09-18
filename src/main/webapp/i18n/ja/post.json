@@ -1,0 +1,28 @@
+{
+  "myReactApp": {
+    "post": {
+      "home": {
+        "title": "Posts",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Post の作成",
+        "createOrEditLabel": "Postの作成または編集",
+        "notFound": "Posts が見つかりません。"
+      },
+      "created": "新しい Post がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Post が更新されました。",
+      "deleted": "ID {{ param }} の Post が削除されました。",
+      "delete": {
+        "question": "Post {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Post"
+      },
+      "id": "ID",
+      "title": "Title",
+      "content": "Content",
+      "date": "Date",
+      "blog": "Blog",
+      "tag": "Tag"
+    }
+  }
+}

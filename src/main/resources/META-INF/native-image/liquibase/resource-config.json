@@ -1,0 +1,8 @@
+{
+  "resources": [
+    {
+      "pattern": "config/liquibase/.*"
+    }
+  ],
+  "bundles": [{ "name": "liquibase/i18n/liquibase-core" }, { "name": "i18n/messages", "locales": ["", "ja"] }]
+}

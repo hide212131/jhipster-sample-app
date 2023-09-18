@@ -1,0 +1,26 @@
+{
+  "myReactApp": {
+    "blog": {
+      "home": {
+        "title": "Blogs",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Blog の作成",
+        "createOrEditLabel": "Blogの作成または編集",
+        "notFound": "Blogs が見つかりません。"
+      },
+      "created": "新しい Blog がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Blog が更新されました。",
+      "deleted": "ID {{ param }} の Blog が削除されました。",
+      "delete": {
+        "question": "Blog {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Blog"
+      },
+      "id": "ID",
+      "name": "Name",
+      "handle": "Handle",
+      "user": "User"
+    }
+  }
+}

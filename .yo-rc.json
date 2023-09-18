@@ -3,6 +3,12 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "myReactApp",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-native",
+        "version": "1.3.2"
+      }
+    ],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "react",
@@ -17,11 +23,12 @@
     "enableHibernateCache": true,
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
-    "entities": [],
+    "entities": ["Tag", "Blog", "Post"],
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.0.0-beta.3",
     "jwtSecretKey": "Yzc5MGQxODlmOWNjMzAyZDkzY2IzMjNiNDJjODA0MTEyZWVjNmI1N2MxMjNhYmI4OWUzZTk5ZGQ4NTVjZWEzZWI5MzQ1ZGJhZWYzMmYzNzM1MzNkZWRkYWI1ZWIwZDU5ZTQ0MTlhYzIxMzI3Nzc5ZjE3ZTE5OGQzNDIzNzc2Y2Q=",
     "languages": ["en", "fr", "ja"],
+    "lastLiquibaseTimestamp": 1694997055000,
     "messageBroker": false,
     "microfrontend": false,
     "microfrontends": [],
