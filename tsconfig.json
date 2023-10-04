@@ -23,5 +23,5 @@
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/main/webapp/app"],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": ["node_modules"]
 }
