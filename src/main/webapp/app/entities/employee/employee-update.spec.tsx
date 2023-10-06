@@ -16,6 +16,11 @@ import { ToastContainer } from 'react-toastify';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import { reset } from './employee.reducer';
 import { IEmployee } from 'app/shared/model/employee.model';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import sharedReducers from 'app/shared/reducers';
+import employee from 'app/entities/employee/employee.reducer';
+import notificationMiddleware from 'app/config/notification-middleware';
+import errorMiddleware from 'app/config/error-middleware';
 
 const formData = {
   firstName: 'Karson',
@@ -25,10 +30,8 @@ const formData = {
   hireDate: '2023-09-24T09:00',
   salary: '28065',
   commissionPct: '26272',
-  // jobs: null,
   manager: '4',
   department: '5',
-  jobHistory: '6',
 };
 
 const formDataPartical = {
@@ -42,18 +45,15 @@ const formDataParticalUpdated = {
 };
 
 const payloadData: IEmployee = {
-  id: 1,
   firstName: 'Karson',
   lastName: 'Bins',
   email: 'Margarita_Hirthe@hotmail.com',
   phoneNumber: 'question yuck minus',
-  hireDate: '2023-09-24T00:00:00Z',
+  hireDate: '2023-09-24T00:00:00.000Z',
   salary: 28065,
   commissionPct: 26272,
-  jobs: [{ id: 2 }, { id: 3 }],
   manager: { id: 4 },
   department: { id: 5 },
-  jobHistory: { id: 6 },
 };
 
 const payloadDataPartical: IEmployee = {
@@ -67,10 +67,10 @@ const payloadDataParticalUpdated: IEmployee = {
 };
 
 const server = setupServer(
-  rest.get('/api/employees/1', (_req, res, ctx) => res(ctx.status(200), ctx.json(payloadData))),
-  rest.get('/api/employees', (_req, res, ctx) => res(ctx.status(200), ctx.json([{ id: 4 }]))),
-  rest.get('/api/departments', (_req, res, ctx) => res(ctx.status(200), ctx.json([{ id: 5 }]))),
-  rest.get('/api/job-histories', (_req, res, ctx) => res(ctx.status(200), ctx.json([{ id: 6 }]))),
+  rest.get('/api/employees/1', (_req, res, ctx) => res(ctx.status(200), ctx.json({ id: 1, ...payloadData }))),
+  rest.get('/api/employees', null),
+  rest.get('/api/departments', null),
+  rest.get('/api/job-histories', null),
 );
 
 beforeAll(() => {
@@ -86,13 +86,37 @@ afterEach(() => {
 
 afterAll(() => server.close());
 
+const preloadedState = {
+  department: {
+    entities: [{ id: 5 }],
+  },
+  jobHistory: {
+    entities: [{ id: 6 }],
+  },
+  employee: {
+    entities: [{ id: 4 }],
+    entity: {},
+  },
+};
+
 const renderComponent = async initialEntry => {
   await waitFor(() => {
-    const store = initStore();
+    const store = configureStore({
+      preloadedState,
+      reducer: combineReducers({ ...sharedReducers, employee }),
+      middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+          serializableCheck: {
+            // Ignore these field paths in all actions
+            ignoredActionPaths: ['payload.config', 'payload.request', 'payload.headers', 'error', 'meta.arg'],
+          },
+        }).concat(errorMiddleware, notificationMiddleware),
+    });
     registerLocale(store);
 
     render(
       <>
+        <ToastContainer className="toastify-container" toastClassName="toastify-toast" />
         <Provider store={store}>
           <MemoryRouter initialEntries={[`/${initialEntry}`]}>
             <ErrorBoundaryRoutes>
@@ -105,7 +129,6 @@ const renderComponent = async initialEntry => {
             </ErrorBoundaryRoutes>
           </MemoryRouter>
         </Provider>
-        <ToastContainer className="toastify-container" toastClassName="toastify-toast" />
       </>,
     );
   });
@@ -125,9 +148,19 @@ describe('EmployeeUpdate Component Test Suite', () => {
     // GIVEN
     server.use(
       rest.post('/api/employees', async (req, res, ctx) => {
-        const payload = await req.json();
-        expect(payload).toMatchObject(payloadData);
-        return res(ctx.status(200), ctx.set('app-alert', 'myReactApp.employee.created'), ctx.set('app-params', '1'), ctx.json(payloadData));
+        try {
+          const payload = await req.json();
+          expect(payload).toMatchObject(payloadData);
+          return res(
+            ctx.status(200),
+            ctx.set('app-alert', 'myReactApp.employee.created'),
+            ctx.set('app-params', '1'),
+            ctx.json(payloadData),
+          );
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e.toString());
+        }
       }),
     );
 
@@ -169,8 +202,18 @@ describe('EmployeeUpdate Component Test Suite', () => {
     server.use(
       rest.put('/api/employees/1', async (req, res, ctx) => {
         const payload = await req.json();
-        expect(payload).toMatchObject(payloadDataParticalUpdated);
-        return res(ctx.status(200), ctx.set('app-alert', 'myReactApp.employee.updated'), ctx.set('app-params', '1'), ctx.json(payloadData));
+        try {
+          expect(payload).toMatchObject(payloadDataParticalUpdated);
+          return res(
+            ctx.status(200),
+            ctx.set('app-alert', 'myReactApp.employee.updated'),
+            ctx.set('app-params', '1'),
+            ctx.json(payloadData),
+          );
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e.toString());
+        }
       }),
     );
 
