@@ -1,0 +1,4 @@
+entity Employee {
+        firstName String,
+        salary Long,
+}
