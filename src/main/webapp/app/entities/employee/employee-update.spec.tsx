@@ -1,9 +1,7 @@
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { Provider } from 'react-redux';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { TranslatorContext, translate } from 'react-jhipster';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -12,15 +10,10 @@ import { registerLocale } from 'app/config/translation';
 import EmployeeUpdate from './employee-update';
 import translation from 'i18n/en/employee.json';
 import { displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { ToastContainer } from 'react-toastify';
-import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import { reset } from './employee.reducer';
 import { IEmployee } from 'app/shared/model/employee.model';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import sharedReducers from 'app/shared/reducers';
 import employee from 'app/entities/employee/employee.reducer';
-import notificationMiddleware from 'app/config/notification-middleware';
-import errorMiddleware from 'app/config/error-middleware';
+import { getByTextKey, getByLabelTextKey, setForm, configureTestStore, TestComponent } from '../entities-test-utils';
 
 const formData = {
   firstName: 'Karson',
@@ -68,6 +61,7 @@ const payloadDataParticalUpdated: IEmployee = {
 
 const server = setupServer(
   rest.get('/api/employees/1', (_req, res, ctx) => res(ctx.status(200), ctx.json({ id: 1, ...payloadData }))),
+  rest.get('/api/employees/2', (_req, res, ctx) => res(ctx.status(200), ctx.json({ id: 2, ...payloadDataPartical }))),
   rest.get('/api/employees', null),
   rest.get('/api/departments', null),
   rest.get('/api/job-histories', null),
@@ -101,41 +95,24 @@ const preloadedState = {
 
 const renderComponent = async initialEntry => {
   await waitFor(() => {
-    const store = configureStore({
-      preloadedState,
-      reducer: combineReducers({ ...sharedReducers, employee }),
-      middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({
-          serializableCheck: {
-            // Ignore these field paths in all actions
-            ignoredActionPaths: ['payload.config', 'payload.request', 'payload.headers', 'error', 'meta.arg'],
-          },
-        }).concat(errorMiddleware, notificationMiddleware),
-    });
+    const store = configureTestStore({ employee }, preloadedState);
     registerLocale(store);
 
     render(
-      <>
-        <ToastContainer className="toastify-container" toastClassName="toastify-toast" />
-        <Provider store={store}>
-          <MemoryRouter initialEntries={[`/${initialEntry}`]}>
-            <ErrorBoundaryRoutes>
-              {/* Required for `navigate('/employee');`. */}
-              <Route index path="/employee/*" element={<span>Navigated to Employees</span>} />
-              <Route path="new" element={<EmployeeUpdate />} />
-              <Route path=":id">
-                <Route path="edit" element={<EmployeeUpdate />} />
-              </Route>
-            </ErrorBoundaryRoutes>
-          </MemoryRouter>
-        </Provider>
-      </>,
+      <TestComponent store={store} initialEntry={initialEntry}>
+        {/* Required for `navigate('/employee');`. */}
+        <Route index path="/employee/*" element={<span>Navigated to Employees</span>} />
+        <Route path="new" element={<EmployeeUpdate />} />
+        <Route path=":id">
+          <Route path="edit" element={<EmployeeUpdate />} />
+        </Route>
+      </TestComponent>,
     );
   });
 };
 
 describe('EmployeeUpdate Component Test Suite', () => {
-  it('should render EmployeeUpdate component for new registration', async () => {
+  it('should render new EmployeeUpdate', async () => {
     // WHEN
     await renderComponent('new');
 
@@ -144,8 +121,43 @@ describe('EmployeeUpdate Component Test Suite', () => {
     expect(getByLabelTextKey('hireDate')).toHaveValue(displayDefaultDateTime());
   });
 
-  it('should send POST request on save button click for new registration and handle successful response', async () => {
+  it('should POST with only required fields for new registration and handle success', async () => {
     // GIVEN
+    let requestError = null;
+    server.use(
+      rest.post('/api/employees', async (req, res, ctx) => {
+        try {
+          const payload = await req.json();
+          expect(payload).toMatchObject(payloadDataPartical);
+          return res(
+            ctx.status(200),
+            ctx.set('app-alert', 'myReactApp.employee.created'),
+            ctx.set('app-params', '1'),
+            ctx.json(payloadData),
+          );
+        } catch (e) {
+          requestError = e;
+          return res(ctx.status(500));
+        }
+      }),
+    );
+
+    // WHEN
+    await renderComponent('new');
+    await setForm(formDataPartical);
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+    // THEN
+    try {
+      expect(await screen.findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
+    } catch (e) {
+      throw requestError ?? e;
+    }
+  });
+
+  it('should POST with all fields for new registration and handle success', async () => {
+    // GIVEN
+    let requestError = null;
     server.use(
       rest.post('/api/employees', async (req, res, ctx) => {
         try {
@@ -158,8 +170,8 @@ describe('EmployeeUpdate Component Test Suite', () => {
             ctx.json(payloadData),
           );
         } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log(e.toString());
+          requestError = e;
+          return res(ctx.status(500));
         }
       }),
     );
@@ -170,10 +182,14 @@ describe('EmployeeUpdate Component Test Suite', () => {
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     // THEN
-    expect(await screen.findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
+    try {
+      expect(await screen.findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
+    } catch (e) {
+      throw requestError ?? e;
+    }
   });
 
-  it('should send POST request on save button click for new registration and handle error response ', async () => {
+  it('should POST for new registration and fail', async () => {
     // GIVEN
     server.use(
       rest.post('/api/employees', async (req, res, ctx) => {
@@ -190,52 +206,58 @@ describe('EmployeeUpdate Component Test Suite', () => {
     expect((await screen.findAllByText('Network Error')).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should render EmployeeUpdate component for updating an employee', async () => {
-    await renderComponent('1/edit');
+  it('should render update EmployeeUpdate', async () => {
+    await renderComponent('2/edit');
     for (const [key, value] of Object.entries(formDataPartical)) {
       expect(getByLabelTextKey(key)).toHaveValue(value);
     }
   });
 
-  it('should send PUT request on update button click and handle successful response', async () => {
+  it('should PUT for update and succeed', async () => {
     // GIVEN
+    let requestError = null;
     server.use(
-      rest.put('/api/employees/1', async (req, res, ctx) => {
+      rest.put('/api/employees/2', async (req, res, ctx) => {
         const payload = await req.json();
         try {
-          expect(payload).toMatchObject(payloadDataParticalUpdated);
+          expect(payload).toMatchObject({ id: 2, ...payloadData, ...payloadDataParticalUpdated });
           return res(
             ctx.status(200),
             ctx.set('app-alert', 'myReactApp.employee.updated'),
-            ctx.set('app-params', '1'),
+            ctx.set('app-params', '2'),
             ctx.json(payloadData),
           );
         } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log(e.toString());
+          requestError = e;
+          return res(ctx.status(500));
         }
       }),
     );
 
     // WHEN
-    await renderComponent('1/edit');
+    await renderComponent('2/edit');
+    await setForm(formData);
     await setForm(formDataParticalUpdated);
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     // THEN
-    expect(await screen.findByText(translate('myReactApp.employee.updated', { param: '1' }))).toBeInTheDocument();
+    try {
+      expect(await screen.findByText(translate('myReactApp.employee.updated', { param: '2' }))).toBeInTheDocument();
+    } catch (e) {
+      throw requestError ?? e;
+    }
   });
 
-  it('should send PUT request on update button click and handle error response', async () => {
+  it('should PUT for update and fail', async () => {
     // GIVEN
     server.use(
-      rest.put('/api/employees/1', async (req, res, ctx) => {
+      rest.put('/api/employees/2', async (req, res, ctx) => {
         return res(ctx.status(500));
       }),
     );
 
     // WHEN
-    await renderComponent('1/edit');
+    await renderComponent('2/edit');
     await setForm(formDataParticalUpdated);
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
@@ -243,30 +265,12 @@ describe('EmployeeUpdate Component Test Suite', () => {
     expect((await screen.findAllByText('Network Error')).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should cancel and navigate back when the back button is clicked', async () => {
+  it(' should cancel and go back', async () => {
     // WHEN
-    await renderComponent('1/edit');
+    await renderComponent('2/edit');
     fireEvent.click(screen.getByRole('link', { name: /back/i }));
 
     // THEN
     expect(await screen.findByText('Navigated to Employees')).toBeInTheDocument();
   });
 });
-
-const getByLabelTextKey = (key: string) => screen.getByLabelText(translate(`myReactApp.employee.${key}`));
-const getByTextKey = (key: string) => screen.getByText(translate(`myReactApp.employee.${key}`));
-const setText = async (key: string, text: string) => {
-  const input = getByLabelTextKey(key);
-  await userEvent.click(input);
-  try {
-    await userEvent.clear(input);
-    await userEvent.type(input, text);
-  } catch {
-    await userEvent.selectOptions(input, text);
-  }
-};
-const setForm = async (data: object) => {
-  for (const [key, value] of Object.entries(data)) {
-    await setText(key, value);
-  }
-};
