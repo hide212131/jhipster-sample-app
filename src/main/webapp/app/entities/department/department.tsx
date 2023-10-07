@@ -13,10 +13,10 @@ import { getEntities } from './department.reducer';
 export const Department = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
 
-  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(location, 'id'), location.search));
+  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, 'id'), pageLocation.search));
 
   const departmentList = useAppSelector(state => state.department.entities);
   const loading = useAppSelector(state => state.department.loading);
@@ -32,8 +32,8 @@ export const Department = () => {
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?sort=${sortState.sort},${sortState.order}`;
-    if (location.search !== endURL) {
-      navigate(`${location.pathname}${endURL}`);
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
 

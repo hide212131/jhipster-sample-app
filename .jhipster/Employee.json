@@ -1,12 +1,13 @@
 {
   "applications": "*",
   "changelogDate": "20230924144220",
+  "documentation": "The Employee entity.",
   "entityTableName": "employee",
   "fields": [
     {
+      "documentation": "The firstname attribute.",
       "fieldName": "firstName",
-      "fieldType": "String",
-      "javadoc": "The firstname attribute."
+      "fieldType": "String"
     },
     {
       "fieldName": "lastName",
@@ -51,7 +52,7 @@
       "relationshipType": "many-to-one"
     },
     {
-      "javadoc": "Another side of the same relationship",
+      "documentation": "Another side of the same relationship",
       "otherEntityName": "department",
       "relationshipName": "department",
       "relationshipSide": "right",

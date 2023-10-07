@@ -18,7 +18,7 @@
       "relationshipType": "one-to-one"
     },
     {
-      "javadoc": "A relationship",
+      "documentation": "A relationship",
       "otherEntityName": "employee",
       "otherEntityRelationshipName": "department",
       "relationshipName": "employee",

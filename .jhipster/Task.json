@@ -1,6 +1,7 @@
 {
   "applications": "*",
   "changelogDate": "20230924144222",
+  "documentation": "Task entity.\\n@author The JHipster team.",
   "entityTableName": "task",
   "fields": [
     {

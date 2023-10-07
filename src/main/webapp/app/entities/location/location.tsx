@@ -13,10 +13,10 @@ import { getEntities } from './location.reducer';
 export const Location = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
 
-  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(location, 'id'), location.search));
+  const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, 'id'), pageLocation.search));
 
   const locationList = useAppSelector(state => state.location.entities);
   const loading = useAppSelector(state => state.location.loading);
@@ -32,8 +32,8 @@ export const Location = () => {
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?sort=${sortState.sort},${sortState.order}`;
-    if (location.search !== endURL) {
-      navigate(`${location.pathname}${endURL}`);
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
 
@@ -110,33 +110,33 @@ export const Location = () => {
               </tr>
             </thead>
             <tbody>
-              {locationList.map((_location, i) => (
+              {locationList.map((location, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`/location/${_location.id}`} color="link" size="sm">
-                      {_location.id}
+                    <Button tag={Link} to={`/location/${location.id}`} color="link" size="sm">
+                      {location.id}
                     </Button>
                   </td>
-                  <td>{_location.streetAddress}</td>
-                  <td>{_location.postalCode}</td>
-                  <td>{_location.city}</td>
-                  <td>{_location.stateProvince}</td>
-                  <td>{_location.country ? <Link to={`/country/${_location.country.id}`}>{_location.country.id}</Link> : ''}</td>
+                  <td>{location.streetAddress}</td>
+                  <td>{location.postalCode}</td>
+                  <td>{location.city}</td>
+                  <td>{location.stateProvince}</td>
+                  <td>{location.country ? <Link to={`/country/${location.country.id}`}>{location.country.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/location/${_location.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <Button tag={Link} to={`/location/${location.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`/location/${_location.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
+                      <Button tag={Link} to={`/location/${location.id}/edit`} color="primary" size="sm" data-cy="entityEditButton">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`/location/${_location.id}/delete`} color="danger" size="sm" data-cy="entityDeleteButton">
+                      <Button tag={Link} to={`/location/${location.id}/delete`} color="danger" size="sm" data-cy="entityDeleteButton">
                         <FontAwesomeIcon icon="trash" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -28,10 +28,6 @@ public class Employee implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    /**
-     * The firstname attribute.
-     */
-    @Schema(description = "The firstname attribute.")
     @Column(name = "first_name")
     private String firstName;
 
@@ -62,10 +58,6 @@ public class Employee implements Serializable {
     @JsonIgnoreProperties(value = { "jobs", "manager", "department", "jobHistory" }, allowSetters = true)
     private Employee manager;
 
-    /**
-     * Another side of the same relationship
-     */
-    @Schema(description = "Another side of the same relationship")
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "location", "employees", "jobHistory" }, allowSetters = true)
     private Department department;

@@ -1,6 +1,7 @@
 {
   "applications": "*",
   "changelogDate": "20230924144221",
+  "documentation": "not an ignored comment",
   "entityTableName": "location",
   "fields": [
     {

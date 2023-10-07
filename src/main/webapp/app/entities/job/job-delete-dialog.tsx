@@ -10,7 +10,7 @@ import { getEntity, deleteEntity } from './job.reducer';
 export const JobDeleteDialog = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
   const { id } = useParams<'id'>();
 
@@ -25,7 +25,7 @@ export const JobDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.job.updateSuccess);
 
   const handleClose = () => {
-    navigate('/job' + location.search);
+    navigate('/job' + pageLocation.search);
   };
 
   useEffect(() => {

@@ -10,7 +10,7 @@ import { getEntity, deleteEntity } from './employee.reducer';
 export const EmployeeDeleteDialog = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
   const { id } = useParams<'id'>();
 

@@ -13,11 +13,11 @@ import { getEntities } from './job.reducer';
 export const Job = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, 'id'), location.search),
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
   const jobList = useAppSelector(state => state.job.entities);
@@ -37,8 +37,8 @@ export const Job = () => {
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
-    if (location.search !== endURL) {
-      navigate(`${location.pathname}${endURL}`);
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
 
@@ -47,7 +47,7 @@ export const Job = () => {
   }, [paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
     const sort = params.get(SORT);
     if (page && sort) {
@@ -59,7 +59,7 @@ export const Job = () => {
         order: sortSplit[1],
       });
     }
-  }, [location.search]);
+  }, [pageLocation.search]);
 
   const sort = p => () => {
     setPaginationState({

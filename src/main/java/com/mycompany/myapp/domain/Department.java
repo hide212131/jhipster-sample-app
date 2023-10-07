@@ -1,7 +1,6 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -36,10 +35,6 @@ public class Department implements Serializable {
     @JoinColumn(unique = true)
     private Location location;
 
-    /**
-     * A relationship
-     */
-    @Schema(description = "A relationship")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "department")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "jobs", "manager", "department", "jobHistory" }, allowSetters = true)

@@ -15,10 +15,10 @@ import { getEntities, reset } from './employee.reducer';
 export const Employee = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, 'id'), location.search),
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
   const [sorting, setSorting] = useState(false);
 
