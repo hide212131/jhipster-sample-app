@@ -1,19 +1,16 @@
 import React from 'react';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Route } from 'react-router-dom';
 import { TranslatorContext, translate } from 'react-jhipster';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import initStore from 'app/config/store';
-import { registerLocale } from 'app/config/translation';
 import EmployeeUpdate from './employee-update';
 import translation from 'i18n/en/employee.json';
 import { displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { reset } from './employee.reducer';
 import { IEmployee } from 'app/shared/model/employee.model';
 import employee from 'app/entities/employee/employee.reducer';
-import { getByTextKey, getByLabelTextKey, setForm, configureTestStore, TestComponent } from '../entities-test-utils';
+import { renderWithProviders } from '../entities-test-utils';
 
 const formData = {
   firstName: 'Karson',
@@ -75,7 +72,6 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   cleanup();
-  initStore().dispatch(reset());
 });
 
 afterAll(() => server.close());
@@ -93,32 +89,33 @@ const preloadedState = {
   },
 };
 
-const renderComponent = async initialEntry => {
-  await waitFor(() => {
-    const store = configureTestStore({ employee }, preloadedState);
-    registerLocale(store);
-
-    render(
-      <TestComponent store={store} initialEntry={initialEntry}>
-        {/* Required for `navigate('/employee');`. */}
-        <Route index path="/employee/*" element={<span>Navigated to Employees</span>} />
-        <Route path="new" element={<EmployeeUpdate />} />
-        <Route path=":id">
-          <Route path="edit" element={<EmployeeUpdate />} />
-        </Route>
-      </TestComponent>,
-    );
-  });
-};
+const renderComponent = initialEntry =>
+  renderWithProviders(
+    <>
+      {/* Required for `navigate('/employee');`. */}
+      <Route index path="/employee/*" element={<span>Navigated to Employees</span>} />
+      <Route path="new" element={<EmployeeUpdate />} />
+      <Route path=":id">
+        <Route path="edit" element={<EmployeeUpdate />} />
+      </Route>
+    </>,
+    {
+      reducers: { employee },
+      preloadedState,
+      initialEntry,
+    },
+  );
 
 describe('EmployeeUpdate Component Test Suite', () => {
   it('should render new EmployeeUpdate', async () => {
     // WHEN
-    await renderComponent('new');
+    const { getByTextKey, getByLabelTextKey } = renderComponent('new');
 
     // THEN
-    expect(getByTextKey('home.createOrEditLabel')).toBeInTheDocument();
-    expect(getByLabelTextKey('hireDate')).toHaveValue(displayDefaultDateTime());
+    await waitFor(() => {
+      expect(getByTextKey('home.createOrEditLabel')).toBeInTheDocument();
+      expect(getByLabelTextKey('hireDate')).toHaveValue(displayDefaultDateTime());
+    });
   });
 
   it('should POST with only required fields for new registration and handle success', async () => {
@@ -143,13 +140,15 @@ describe('EmployeeUpdate Component Test Suite', () => {
     );
 
     // WHEN
-    await renderComponent('new');
-    await setForm(formDataPartical);
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    const { setForm, getByRole, findByText } = renderComponent('new');
+    await waitFor(async () => {
+      await setForm(formDataPartical);
+      fireEvent.click(getByRole('button', { name: /save/i }));
+    });
 
     // THEN
     try {
-      expect(await screen.findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
+      expect(await findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
     } catch (e) {
       throw requestError ?? e;
     }
@@ -177,13 +176,15 @@ describe('EmployeeUpdate Component Test Suite', () => {
     );
 
     // WHEN
-    await renderComponent('new');
-    await setForm(formData);
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    const { setForm, getByRole, findByText } = renderComponent('new');
+    await waitFor(async () => {
+      await setForm(formData);
+      fireEvent.click(getByRole('button', { name: /save/i }));
+    });
 
     // THEN
     try {
-      expect(await screen.findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
+      expect(await findByText(translate('myReactApp.employee.created', { param: '1' }))).toBeInTheDocument();
     } catch (e) {
       throw requestError ?? e;
     }
@@ -198,19 +199,23 @@ describe('EmployeeUpdate Component Test Suite', () => {
     );
 
     // WHEN
-    await renderComponent('new');
-    await setForm(formDataPartical);
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    const { setForm, getByRole, findAllByText } = renderComponent('new');
+    await waitFor(async () => {
+      await setForm(formDataPartical);
+      fireEvent.click(getByRole('button', { name: /save/i }));
+    });
 
     // THEN
-    expect((await screen.findAllByText('Network Error')).length).toBeGreaterThanOrEqual(1);
+    expect((await findAllByText('Network Error')).length).toBeGreaterThanOrEqual(1);
   });
 
   it('should render update EmployeeUpdate', async () => {
-    await renderComponent('2/edit');
-    for (const [key, value] of Object.entries(formDataPartical)) {
-      expect(getByLabelTextKey(key)).toHaveValue(value);
-    }
+    const { getByLabelTextKey } = renderComponent('2/edit');
+    await waitFor(() => {
+      for (const [key, value] of Object.entries(formDataPartical)) {
+        expect(getByLabelTextKey(key)).toHaveValue(value);
+      }
+    });
   });
 
   it('should PUT for update and succeed', async () => {
@@ -235,14 +240,22 @@ describe('EmployeeUpdate Component Test Suite', () => {
     );
 
     // WHEN
-    await renderComponent('2/edit');
-    await setForm(formData);
-    await setForm(formDataParticalUpdated);
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    const { getByLabelTextKey, setForm, getByRole, findByText } = renderComponent('2/edit');
+    await waitFor(() => {
+      for (const [key, value] of Object.entries(formDataPartical)) {
+        expect(getByLabelTextKey(key)).toHaveValue(value);
+      }
+    });
+
+    await waitFor(async () => {
+      await setForm(formData);
+      await setForm(formDataParticalUpdated);
+      fireEvent.click(getByRole('button', { name: /save/i }));
+    });
 
     // THEN
     try {
-      expect(await screen.findByText(translate('myReactApp.employee.updated', { param: '2' }))).toBeInTheDocument();
+      expect(await findByText(translate('myReactApp.employee.updated', { param: '2' }))).toBeInTheDocument();
     } catch (e) {
       throw requestError ?? e;
     }
@@ -257,20 +270,24 @@ describe('EmployeeUpdate Component Test Suite', () => {
     );
 
     // WHEN
-    await renderComponent('2/edit');
-    await setForm(formDataParticalUpdated);
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    const { setForm, getByRole, findAllByText } = renderComponent('2/edit');
+    await waitFor(async () => {
+      await setForm(formDataParticalUpdated);
+      fireEvent.click(getByRole('button', { name: /save/i }));
+    });
 
     // THEN
-    expect((await screen.findAllByText('Network Error')).length).toBeGreaterThanOrEqual(1);
+    expect((await findAllByText('Network Error')).length).toBeGreaterThanOrEqual(1);
   });
 
   it(' should cancel and go back', async () => {
     // WHEN
-    await renderComponent('2/edit');
-    fireEvent.click(screen.getByRole('link', { name: /back/i }));
+    const { getByRole, findByText } = renderComponent('2/edit');
+    await waitFor(() => {
+      fireEvent.click(getByRole('link', { name: /back/i }));
+    });
 
     // THEN
-    expect(await screen.findByText('Navigated to Employees')).toBeInTheDocument();
+    expect(await findByText('Navigated to Employees')).toBeInTheDocument();
   });
 });
