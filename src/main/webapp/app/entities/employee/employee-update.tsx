@@ -54,8 +54,8 @@ export const EmployeeUpdate = () => {
 
   const saveEntity = values => {
     values.hireDate = convertDateTimeToServer(values.hireDate);
-    values.commissionPct = values.commissionPct ? parseInt(values.commissionPct, 10) : values.commissionPct;
     values.salary = values.salary ? parseInt(values.salary, 10) : values.salary;
+    values.commissionPct = values.commissionPct ? parseInt(values.commissionPct, 10) : values.commissionPct;
 
     const entity = {
       ...employeeEntity,
@@ -75,6 +75,7 @@ export const EmployeeUpdate = () => {
     isNew
       ? {
           hireDate: displayDefaultDateTime(),
+          firstName: 'HIDE',
         }
       : {
           ...employeeEntity,
