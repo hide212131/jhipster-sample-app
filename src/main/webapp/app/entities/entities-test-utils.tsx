@@ -3,7 +3,7 @@
  * for React components and Redux stores.
  */
 import userEvent from '@testing-library/user-event';
-import { RenderOptions, render, screen } from '@testing-library/react';
+import { RenderOptions, render } from '@testing-library/react';
 import { translate } from 'react-jhipster';
 import errorMiddleware from 'app/config/error-middleware';
 import notificationMiddleware from 'app/config/notification-middleware';
@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import React, { PropsWithChildren } from 'react';
-import getStore, { IRootState } from 'app/config/store';
+import { IRootState } from 'app/config/store';
 import { registerLocale } from 'app/config/translation';
 
 /**
@@ -45,6 +45,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   store?: ReturnType<typeof setupStore>;
   reducers: ReducersMapObject;
   initialEntry: string;
+  entityName: string;
 }
 
 /**
@@ -56,6 +57,7 @@ export const renderWithProviders = (
     reducers,
     preloadedState,
     initialEntry,
+    entityName,
     // Automatically create a store instance if no store was passed in
     store = setupStore(reducers, preloadedState),
     ...renderOptions
@@ -77,14 +79,14 @@ export const renderWithProviders = (
    * @param {string} key - The key used for translation.
    * @returns The DOM element.
    */
-  const getByLabelTextKey = (key: string) => renderResult.getByLabelText(translate(`myReactApp.employee.${key}`));
+  const getByLabelTextKey = (key: string) => renderResult.getByLabelText(translate(`myReactApp.${entityName}.${key}`));
 
   /**
    * Gets an element by its text key.
    * @param {string} key - The key used for translation.
    * @returns The DOM element.
    */
-  const getByTextKey = (key: string) => renderResult.getByText(translate(`myReactApp.employee.${key}`));
+  const getByTextKey = (key: string) => renderResult.getByText(translate(`myReactApp.${entityName}.${key}`));
 
   /**
    * Sets the text for an input element identified by a label text key.

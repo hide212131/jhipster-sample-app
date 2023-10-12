@@ -8,53 +8,17 @@ import { setupServer } from 'msw/node';
 import EmployeeUpdate from './employee-update';
 import translation from 'i18n/en/employee.json';
 import { displayDefaultDateTime } from 'app/shared/util/date-utils';
-import { IEmployee } from 'app/shared/model/employee.model';
 import employee from 'app/entities/employee/employee.reducer';
 import { renderWithProviders } from '../entities-test-utils';
-
-const formData = {
-  firstName: 'Karson',
-  lastName: 'Bins',
-  email: 'Margarita_Hirthe@hotmail.com',
-  phoneNumber: 'question yuck minus',
-  hireDate: '2023-09-24T09:00',
-  salary: '28065',
-  commissionPct: '26272',
-  manager: '4',
-  department: '5',
-};
-
-const formDataPartical = {
-  firstName: 'Karson',
-  lastName: 'Bins',
-};
-
-const formDataParticalUpdated = {
-  firstName: 'Updated',
-  lastName: 'Updated2',
-};
-
-const payloadData: IEmployee = {
-  firstName: 'Karson',
-  lastName: 'Bins',
-  email: 'Margarita_Hirthe@hotmail.com',
-  phoneNumber: 'question yuck minus',
-  hireDate: '2023-09-24T00:00:00.000Z',
-  salary: 28065,
-  commissionPct: 26272,
-  manager: { id: 4 },
-  department: { id: 5 },
-};
-
-const payloadDataPartical: IEmployee = {
-  firstName: 'Karson',
-  lastName: 'Bins',
-};
-
-const payloadDataParticalUpdated: IEmployee = {
-  firstName: 'Updated',
-  lastName: 'Updated2',
-};
+import {
+  payloadData,
+  payloadDataPartical,
+  formDataPartical,
+  formData,
+  payloadDataParticalUpdated,
+  formDataParticalUpdated,
+  preloadedState,
+} from './employee.test-samples';
 
 const server = setupServer(
   rest.get('/api/employees/1', (_req, res, ctx) => res(ctx.status(200), ctx.json({ id: 1, ...payloadData }))),
@@ -76,19 +40,6 @@ afterEach(() => {
 
 afterAll(() => server.close());
 
-const preloadedState = {
-  department: {
-    entities: [{ id: 5 }],
-  },
-  jobHistory: {
-    entities: [{ id: 6 }],
-  },
-  employee: {
-    entities: [{ id: 4 }],
-    entity: {},
-  },
-};
-
 const renderComponent = initialEntry =>
   renderWithProviders(
     <>
@@ -103,6 +54,7 @@ const renderComponent = initialEntry =>
       reducers: { employee },
       preloadedState,
       initialEntry,
+      entityName: 'employee',
     },
   );
 
