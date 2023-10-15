@@ -3,6 +3,12 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "myReactApp",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-react-enhance",
+        "version": "0.0.0"
+      }
+    ],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "react",
