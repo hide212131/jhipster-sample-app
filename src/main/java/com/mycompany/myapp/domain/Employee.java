@@ -258,7 +258,7 @@ public class Employee implements Serializable {
         if (!(o instanceof Employee)) {
             return false;
         }
-        return id != null && id.equals(((Employee) o).id);
+        return getId() != null && getId().equals(((Employee) o).getId());
     }
 
     @Override

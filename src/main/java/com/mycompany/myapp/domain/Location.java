@@ -155,7 +155,7 @@ public class Location implements Serializable {
         if (!(o instanceof Location)) {
             return false;
         }
-        return id != null && id.equals(((Location) o).id);
+        return getId() != null && getId().equals(((Location) o).getId());
     }
 
     @Override

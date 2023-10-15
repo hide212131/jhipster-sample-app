@@ -121,7 +121,7 @@ public class Task implements Serializable {
         if (!(o instanceof Task)) {
             return false;
         }
-        return id != null && id.equals(((Task) o).id);
+        return getId() != null && getId().equals(((Task) o).getId());
     }
 
     @Override

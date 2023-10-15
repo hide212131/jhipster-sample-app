@@ -169,7 +169,7 @@ public class Job implements Serializable {
         if (!(o instanceof Job)) {
             return false;
         }
-        return id != null && id.equals(((Job) o).id);
+        return getId() != null && getId().equals(((Job) o).getId());
     }
 
     @Override

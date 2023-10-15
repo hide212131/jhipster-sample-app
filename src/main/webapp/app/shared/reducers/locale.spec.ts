@@ -33,7 +33,6 @@ describe('Locale reducer tests', () => {
         sourcePrefixes: [],
         lastChange: new Date().getTime(),
         loadedKeys: [],
-        loadedLocales: [],
       },
       updateLocale('es'),
     );
