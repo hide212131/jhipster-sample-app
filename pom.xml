@@ -27,8 +27,8 @@
         -->
         <maven.version>3.2.5</maven.version>
         <java.version>17</java.version>
-        <node.version>v18.17.1</node.version>
-        <npm.version>10.1.0</npm.version>
+        <node.version>v18.18.1</node.version>
+        <npm.version>10.2.0</npm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -41,13 +41,13 @@
         <jhipster-dependencies.version>8.0.0-SNAPSHOT</jhipster-dependencies.version>
         <spring-boot.version>3.1.4</spring-boot.version>
         <archunit-junit5.version>1.1.0</archunit-junit5.version>
-        <checkstyle.version>10.12.3</checkstyle.version>
+        <checkstyle.version>10.12.4</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <h2.version>2.2.224</h2.version>
         <hibernate.version>6.2.9.Final</hibernate.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <jaxb-runtime.version>4.0.3</jaxb-runtime.version>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <jib-maven-plugin.image>eclipse-temurin:17-jre-focal</jib-maven-plugin.image>
@@ -58,7 +58,7 @@
         <liquibase-plugin.password/>
         <liquibase-plugin.url/>
         <liquibase-plugin.username/>
-        <liquibase.version>4.23.2</liquibase.version>
+        <liquibase.version>4.24.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
@@ -854,7 +854,7 @@
                 <profile.test>testdev</profile.test>
                 <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.H2Dialect</liquibase-plugin.hibernate-dialect>
                 <liquibase-plugin.driver>org.h2.Driver</liquibase-plugin.driver>
-                <liquibase-plugin.url>jdbc:h2:file:${project.build.directory}/h2db/db/myapp</liquibase-plugin.url>
+                <liquibase-plugin.url>jdbc:h2:file:${project.build.directory}/h2db/db/myApp</liquibase-plugin.url>
                 <liquibase-plugin.username>myApp</liquibase-plugin.username>
                 <liquibase-plugin.password/>
             </properties>

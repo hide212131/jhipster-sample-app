@@ -1,4 +1,13 @@
 entity Employee {
         firstName String,
         salary Long,
+        hireDate Instant,
+}
+
+entity Department {
+	departmentName String required
+}
+
+relationship OneToMany {
+	Department to Employee{department}
 }

@@ -1,0 +1,29 @@
+{
+  "applications": "*",
+  "changelogDate": "20231006113137",
+  "entityTableName": "employee",
+  "fields": [
+    {
+      "fieldName": "firstName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "salary",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "hireDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Employee",
+  "relationships": [
+    {
+      "otherEntityName": "department",
+      "relationshipName": "department",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}
