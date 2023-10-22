@@ -26,7 +26,7 @@ export const getEntities = createAsyncThunk('employee/fetch_entity_list', async 
 export const getEntity = createAsyncThunk(
   'employee/fetch_entity',
   async (id: string | number) => {
-    const requestUrl = `${apiUrl}/${id}`;
+    const requestUrl = `${apiUrl}/${id}?eagerload=true`;
     return axios.get<IEmployee>(requestUrl);
   },
   { serializeError: serializeAxiosError },

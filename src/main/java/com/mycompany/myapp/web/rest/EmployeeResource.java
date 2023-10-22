@@ -161,9 +161,17 @@ public class EmployeeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the employee, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
+    public ResponseEntity<Employee> getEmployee(
+        @PathVariable Long id,
+        @RequestParam(required = false, defaultValue = "false") boolean eagerload
+    ) {
         log.debug("REST request to get Employee : {}", id);
-        Optional<Employee> employee = employeeRepository.findById(id);
+        Optional<Employee> employee;
+        if (eagerload) {
+            employee = employeeRepository.findOneWithEagerRelationships(id);
+        } else {
+            employee = employeeRepository.findById(id);
+        }
         return ResponseUtil.wrapOrNotFound(employee);
     }
 
