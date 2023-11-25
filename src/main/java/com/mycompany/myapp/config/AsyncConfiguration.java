@@ -38,6 +38,7 @@ public class AsyncConfiguration implements AsyncConfigurer {
         executor.setMaxPoolSize(taskExecutionProperties.getPool().getMaxSize());
         executor.setQueueCapacity(taskExecutionProperties.getPool().getQueueCapacity());
         executor.setThreadNamePrefix(taskExecutionProperties.getThreadNamePrefix());
+        executor.initialize();
         return new ExceptionHandlingAsyncTaskExecutor(executor);
     }
 

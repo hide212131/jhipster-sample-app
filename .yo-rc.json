@@ -3,6 +3,12 @@
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "myNativeJwtApp",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-native",
+        "version": "1.3.2"
+      }
+    ],
     "buildTool": "maven",
     "cacheProvider": "ehcache",
     "clientFramework": "react",
