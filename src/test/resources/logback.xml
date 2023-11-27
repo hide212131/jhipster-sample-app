@@ -4,44 +4,44 @@
 <configuration scan="true">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <logger name="com.mycompany.myapp" level="TRACE"/>
+    <logger name="com.mycompany.myapp" level="INFO"/>
 
-    <logger name="tech.jhipster" level="TRACE"/>
+    <logger name="tech.jhipster" level="WARN"/>
 
     <!-- https://www.testcontainers.org/supported_docker_environment/logging_config/ -->
-    <logger name="org.testcontainers" level="TRACE"/>
-    <logger name="com.github.dockerjava" level="TRACE"/>
+    <logger name="org.testcontainers" level="INFO"/>
+    <logger name="com.github.dockerjava" level="WARN"/>
 
-    <logger name="jakarta.activation" level="TRACE"/>
-    <logger name="jakarta.mail" level="TRACE"/>
-    <logger name="jakarta.xml.bind" level="TRACE"/>
-    <logger name="ch.qos.logback" level="TRACE"/>
-    <logger name="com.jayway.jsonpath" level="TRACE"/>
-    <logger name="com.ryantenney" level="TRACE"/>
-    <logger name="com.sun" level="TRACE"/>
-    <logger name="com.zaxxer" level="TRACE"/>
-    <logger name="io.undertow" level="TRACE"/>
+    <logger name="jakarta.activation" level="WARN"/>
+    <logger name="jakarta.mail" level="WARN"/>
+    <logger name="jakarta.xml.bind" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="com.jayway.jsonpath" level="WARN"/>
+    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
-    <logger name="org.ehcache" level="TRACE"/>
-    <logger name="org.apache" level="TRACE"/>
+    <logger name="org.ehcache" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
-    <logger name="org.bson" level="TRACE"/>
-    <logger name="org.hibernate.validator" level="TRACE"/>
-    <logger name="org.hibernate" level="TRACE"/>
+    <logger name="org.bson" level="WARN"/>
+    <logger name="org.hibernate.validator" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
-    <logger name="org.postgresql.jdbc" level="TRACE"/>
-    <logger name="org.springframework" level="TRACE"/>
-    <logger name="org.springframework.web" level="TRACE"/>
-    <logger name="org.springframework.security" level="TRACE"/>
-    <logger name="org.springframework.cache" level="TRACE"/>
-    <logger name="org.thymeleaf" level="TRACE"/>
-    <logger name="org.xnio" level="TRACE"/>
-    <logger name="io.swagger.v3" level="TRACE"/>
-    <logger name="sun.rmi" level="TRACE"/>
-    <logger name="sun.rmi.transport" level="TRACE"/>
+    <logger name="org.postgresql.jdbc" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/>
+    <logger name="io.swagger.v3" level="INFO"/>
+    <logger name="sun.rmi" level="WARN"/>
+    <logger name="sun.rmi.transport" level="WARN"/>
     <logger name="com.tngtech.archunit.core.importer" level="ERROR"/>
-    <logger name="liquibase" level="TRACE"/>
-    <logger name="LiquibaseSchemaResolver" level="TRACE"/>
+    <logger name="liquibase" level="WARN"/>
+    <logger name="LiquibaseSchemaResolver" level="INFO"/>
     <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level -->
 
 </configuration>
