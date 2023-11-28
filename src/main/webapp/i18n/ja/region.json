@@ -1,0 +1,25 @@
+{
+  "myApp": {
+    "region": {
+      "home": {
+        "title": "Regions",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Region の作成",
+        "createOrEditLabel": "Regionの作成または編集",
+        "notFound": "Regions が見つかりません。"
+      },
+      "created": "新しい Region がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Region が更新されました。",
+      "deleted": "ID {{ param }} の Region が削除されました。",
+      "delete": {
+        "question": "Region {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Region"
+      },
+      "id": "ID",
+      "regionName": "Region Name",
+      "country": "Country"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "myApp": {
+    "jobHistory": {
+      "home": {
+        "title": "JobHistories",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Job History の作成",
+        "createOrEditLabel": "Job Historyの作成または編集",
+        "notFound": "Job Histories が見つかりません。"
+      },
+      "created": "新しい Job History がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Job History が更新されました。",
+      "deleted": "ID {{ param }} の Job History が削除されました。",
+      "delete": {
+        "question": "Job History {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Job History"
+      },
+      "id": "ID",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "language": "Language",
+      "job": "Job",
+      "department": "Department",
+      "employee": "Employee"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "myApp": {
+    "task": {
+      "home": {
+        "title": "Tasks",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Task の作成",
+        "createOrEditLabel": "Taskの作成または編集",
+        "notFound": "Tasks が見つかりません。"
+      },
+      "created": "新しい Task がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Task が更新されました。",
+      "deleted": "ID {{ param }} の Task が削除されました。",
+      "delete": {
+        "question": "Task {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Task"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "job": "Job"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "myApp": {
+    "country": {
+      "home": {
+        "title": "Countries",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Country の作成",
+        "createOrEditLabel": "Countryの作成または編集",
+        "notFound": "Countries が見つかりません。"
+      },
+      "created": "新しい Country がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Country が更新されました。",
+      "deleted": "ID {{ param }} の Country が削除されました。",
+      "delete": {
+        "question": "Country {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Country"
+      },
+      "id": "ID",
+      "countryName": "Country Name",
+      "region": "Region",
+      "location": "Location"
+    }
+  }
+}

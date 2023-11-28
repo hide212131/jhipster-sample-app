@@ -1,0 +1,29 @@
+{
+  "myApp": {
+    "job": {
+      "home": {
+        "title": "Jobs",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Job の作成",
+        "createOrEditLabel": "Jobの作成または編集",
+        "notFound": "Jobs が見つかりません。"
+      },
+      "created": "新しい Job がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Job が更新されました。",
+      "deleted": "ID {{ param }} の Job が削除されました。",
+      "delete": {
+        "question": "Job {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Job"
+      },
+      "id": "ID",
+      "jobTitle": "Job Title",
+      "minSalary": "Min Salary",
+      "maxSalary": "Max Salary",
+      "task": "Task",
+      "employee": "Employee",
+      "jobHistory": "Job History"
+    }
+  }
+}

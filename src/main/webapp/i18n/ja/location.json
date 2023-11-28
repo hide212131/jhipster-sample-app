@@ -1,0 +1,29 @@
+{
+  "myApp": {
+    "location": {
+      "home": {
+        "title": "Locations",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Location の作成",
+        "createOrEditLabel": "Locationの作成または編集",
+        "notFound": "Locations が見つかりません。"
+      },
+      "created": "新しい Location がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Location が更新されました。",
+      "deleted": "ID {{ param }} の Location が削除されました。",
+      "delete": {
+        "question": "Location {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Location"
+      },
+      "id": "ID",
+      "streetAddress": "Street Address",
+      "postalCode": "Postal Code",
+      "city": "City",
+      "stateProvince": "State Province",
+      "country": "Country",
+      "department": "Department"
+    }
+  }
+}

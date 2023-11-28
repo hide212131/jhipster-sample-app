@@ -1,0 +1,27 @@
+{
+  "myApp": {
+    "department": {
+      "home": {
+        "title": "Departments",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Department の作成",
+        "createOrEditLabel": "Departmentの作成または編集",
+        "notFound": "Departments が見つかりません。"
+      },
+      "created": "新しい Department がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Department が更新されました。",
+      "deleted": "ID {{ param }} の Department が削除されました。",
+      "delete": {
+        "question": "Department {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Department"
+      },
+      "id": "ID",
+      "departmentName": "Department Name",
+      "location": "Location",
+      "employee": "Employee",
+      "jobHistory": "Job History"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "myApp": {
+    "employee": {
+      "home": {
+        "title": "Employees",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Employee の作成",
+        "createOrEditLabel": "Employeeの作成または編集",
+        "notFound": "Employees が見つかりません。"
+      },
+      "created": "新しい Employee がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Employee が更新されました。",
+      "deleted": "ID {{ param }} の Employee が削除されました。",
+      "delete": {
+        "question": "Employee {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Employee"
+      },
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "hireDate": "Hire Date",
+      "salary": "Salary",
+      "commissionPct": "Commission Pct",
+      "job": "Job",
+      "manager": "Manager",
+      "department": "Department",
+      "jobHistory": "Job History",
+      "help": {
+        "firstName": "The firstname attribute."
+      }
+    }
+  }
+}
