@@ -5,11 +5,11 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -41,16 +41,16 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    @Autowired
-    @Lazy
-    private MailService self;
+    private final ObjectProvider<MailService> mailServiceObjectProvider;
 
     public MailService(
+        ObjectProvider<MailService> mailServiceObjectProvider,
         JHipsterProperties jHipsterProperties,
         JavaMailSender javaMailSender,
         MessageSource messageSource,
         SpringTemplateEngine templateEngine
     ) {
+        this.mailServiceObjectProvider = mailServiceObjectProvider;
         this.jHipsterProperties = jHipsterProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
@@ -95,24 +95,28 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
+        MailService self = Objects.requireNonNull(mailServiceObjectProvider.getIfAvailable());
         self.sendEmail(user.getEmail(), subject, content, false, true);
     }
 
     @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
+        MailService self = Objects.requireNonNull(mailServiceObjectProvider.getIfAvailable());
         self.sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
+        MailService self = Objects.requireNonNull(mailServiceObjectProvider.getIfAvailable());
         self.sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
+        MailService self = Objects.requireNonNull(mailServiceObjectProvider.getIfAvailable());
         self.sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
 }
